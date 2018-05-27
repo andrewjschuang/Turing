@@ -10,22 +10,28 @@ sub_tasks = db.Table('sub_tasks',
 
 
 class Task(db.Model):
+    """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
     tasks = db.relationship('Task', secondary=sub_tasks, lazy='subquery',
-                            backref=db.backref('tasks', lazy=True))
+                            backref=db.backref('super_task', lazy=True))
 
-    def __repr__(self):
-        return '<User %r>' % self.email
+    def add_task(self, name, description, end_time):
+        """Adds subtasks to this taks"""
+        self.tasks.append(
+            Task(name=name, description=description, end_time=end_time)
+        )
+        db.session.update(self)
+        db.session.commit()
 
 
 user_tasks = db.Table('task_user',
                       db.Column('task_id', db.Integer, db.ForeignKey(
                           'task.id'), primary_key=True),
-                      db.Column('user_email', db.Integer, db.ForeignKey(
-                          'page.id'), primary_key=True)
+                      db.Column('user_id', db.Integer, db.ForeignKey(
+                          'user.id'), primary_key=True)
                       )
 
 
@@ -37,8 +43,14 @@ class User(db.Model):
     tasks = db.relationship('Task', secondary=user_tasks, lazy='subquery',
                             backref=db.backref('users', lazy=True))
 
-    def __repr__(self):
-        return '<User %r>' % self.email
+    def add_task(self, id):
+        task = Task.query.filter_by(id=id).first()
+        if task:
+            self.tasks.append(task)
+            db.session.update(self)
+            db.session.commit()
+        else:
+            raise Exception()
 
 
 project_tasks = db.Table('project_tasks',
@@ -48,17 +60,41 @@ project_tasks = db.Table('project_tasks',
                              'task.id'), primary_key=True)
                          )
 
+project_users = db.Table('project_users',
+                         db.Column('project_id', db.Integer, db.ForeignKey(
+                             'project.id'), primary_key=True),
+                         db.Column('user_id', db.Integer, db.ForeignKey(
+                             'user.id'), primary_key=True)
+                         )
+
 
 class Project(db.Model):
+    """Project Class contains link to the user that interact with this project,
+        the top level tasks related to id"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',
                             backref=db.backref('project', lazy=True))
+    users = db.relationship('User', secondary=project_users, lazy='subquery',
+                            backref=db.backref('project', lazy=True))
 
     def add_task(self, name, description, end_time):
+        """Adds a new Task to this Project"""
         self.tasks.append(
             Task(name=name, description=description, end_time=end_time)
         )
         db.session.update(self)
         db.session.commit()
+
+    def add_user(self, em_usname):
+        """Adds existing user to thihs project"""
+        user = User.query.filter_by(email=em_usname).first()
+        if not user:
+            user = User.query.filter_by(username=em_usname).first()
+        if user:
+            self.users.append(user)
+            db.session.update(self)
+            db.session.commit()
+        else:
+            raise Exception()

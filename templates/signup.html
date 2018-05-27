@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}"> {% endblock %}
+</head>
+
+<div class="container_holder">
+
+    <body>
+        <div class="container">
+            {% block turing_img%}
+            <img class="turing_img" src="{{ url_for('static', filename='turing.jpg')}}"> {% endblock %}
+            <h2 class="top">Register Now</h2>
+            <form action="" method="post" role="form">
+                {{ form.csrf }}
+                <div class="signin">
+                    <label for="name">Username:</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="What's your name?">
+                    <br>
+                    <label for="email">Email:</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Your email will be used to contact you.">
+                    <br>
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter a password.">
+
+
+                </div>
+                <button type="submit" class="registerbtn">Sign Up</button>
+
+
+                <br> {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for message in messages
+                %} {% if message[0] == 'error': %}
+                <h5 class="alert_error">
+                    {{ message[1] }}
+                </h5>
+                {% endif %} {% if message[0] == 'message': %}
+                <h5 class="alert_message">
+                    {{ message[1] }}
+                </h5>
+                {% endif %} {% endfor %} {% endif %} {% endwith %}
+            </form>
+
+        </div>
+        <br>
+
+    </body>
+</div>
+
+</html>
