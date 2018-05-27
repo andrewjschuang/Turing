@@ -24,7 +24,7 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def index():
 
     form = ReusableForm(request.form)
