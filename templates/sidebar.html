@@ -1,0 +1,51 @@
+{% block style%}
+
+<head>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+</head>
+{% endblock %} {% block sidebar%}
+<div class="vertical-menu">
+
+    <img class="turing_img" src="{{ url_for('static', filename='img/turing.jpg')}}">
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">home</i>
+            <span class="column-detail">Home</span>
+        </a>
+    </div>
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">class</i>
+            <span class="column-detail">Projects</span>
+        </a>
+    </div>
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">assignment</i>
+            <span class="column-detail">To-Do</span>
+        </a>
+    </div>
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">code</i>
+            <span class="column-detail">Code</span>
+        </a>
+    </div>
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">message</i>
+            <span class="column-detail">Feedback</span>
+        </a>
+    </div>
+    <div class="column">
+        <a class='link' href="/">
+            <i class="material-icons">dashboard</i>
+            <span class="column-detail">Dashboard</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

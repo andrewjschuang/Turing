@@ -11,24 +11,23 @@
         <div class="container">
             {% block turing_img%}
             <img class="turing_img" src="{{ url_for('static', filename='img/turing.jpg')}}"> {% endblock %}
-            <p class="top">Register Now</p>
+            <p class="top">Login Now</p>
             <form action="" method="post" role="form">
                 {{ form.csrf }}
                 <div class="signin">
-                    <label for="name">Username:</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="What's your name?">
-                    <br>
                     <label for="email">Email:</label>
-                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email.">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Your email will be used to contact you.">
                     <br>
                     <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password.">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter a password.">
                 </div>
-                <button type="submit" class="registerbtn">Sign Up</button>
+                <button type="submit" class="registerbtn">Login</button>
+                <a href="/signup">
+                    <p class="registerbtn"> Dont have an account? Sign up !</p>
+                </a>
 
-
-                <br> {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for message in messages
-                %} {% if message[0] == 'error': %}
+                {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for message in messages %} {% if message[0]
+                == 'error': %}
                 <p class="alert_error">
                     {{ message[1] }}
                 </p>
@@ -38,8 +37,10 @@
                 </p>
                 {% endif %} {% endfor %} {% endif %} {% endwith %}
             </form>
+
         </div>
         <br>
+
     </body>
 </div>
 
