@@ -63,7 +63,9 @@ def login():
             if user:
                 if user.password == password:
                     session['auth'] = {'name': user.username,
-                                       'email': user.email, 'timestamp': time.time()}
+                                       'email': user.email,
+                                       'timestamp': time.time()
+                                       }
                     return redirect(url_for('index'))
                 else:
                     flash('Authentication failed', category='error')
@@ -77,7 +79,17 @@ def login():
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    auth = session.get('auth')
+    if auth:
+        return render_template('index.html')
+    else:
+        return redirect('/login')
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('auth')
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
