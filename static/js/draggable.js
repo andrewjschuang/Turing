@@ -1,5 +1,8 @@
 //Make the DIV element draggagle:
-dragElement(document.getElementById(("mydiv")));
+dragElement(document.getElementById(("projetos")));
+dragElement(document.getElementById(("forum")));
+dragElement(document.getElementById(("code_preview")));
+dragElement(document.getElementById(("tarefas")));
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

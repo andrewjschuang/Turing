@@ -1,4 +1,6 @@
-#mydiv {
+#projetos {
+    left: 15%;
+    top: 5%;
     position: absolute;
     z-index: 9;
     background-color: #f1f1f1;
@@ -6,7 +8,61 @@
     border: 1px solid #d3d3d3;
 }
 
-#mydivheader {
+#projetosheader {
+    padding: 100px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+}
+
+#forum {
+    left: 40%;
+    top: 10%;
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+}
+
+#forumheader {
+    padding: 100px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+}
+
+#code_preview {
+    left: 20%;
+    top: 40%;
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+}
+
+#code_previewheader {
+    padding: 100px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+}
+
+#tarefas {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+}
+
+#tarefasheader {
     padding: 100px;
     cursor: move;
     z-index: 10;
