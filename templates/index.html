@@ -2,20 +2,12 @@
 {% extends "sidebar.html" %}
 
 {% block content %}
-  <div class="row">
-      <div class="tile_column">
-        <div class="tile_content">ola</div>
-        <div class="tile_content">ola</div>
-      </div>
-      <div class="tile_column">
-        <div class="tile_content">ola</div>
-      </div>
-      <div class="tile_column">
-        <div class="tile_content">ola</div>
-      </div>
-      <div class="tile_column">
-        <div class="tile_content">ola</div>
-      </div>
-    </div>
-  {% endblock %}
-  
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/draggable.css') }}">
+
+<div id="mydiv">
+  <div id="mydivheader">Projetos</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/draggable.js') }}"></script>
+{% endblock %}
