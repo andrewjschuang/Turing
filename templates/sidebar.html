@@ -1,5 +1,4 @@
-{% block style%}
-
+{% block head%}
 <head>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
@@ -7,7 +6,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 </head>
-{% endblock %} {% block sidebar%}
+{% endblock %} 
+
+{% block sidebar%}
 <div class="vertical-menu">
 
     <img class="turing_img" src="{{ url_for('static', filename='img/turing.jpg')}}">
@@ -55,3 +56,5 @@
     </div>
 </div>
 {% endblock %}
+
+<div class="content">{% block content %}{% endblock %}</div>

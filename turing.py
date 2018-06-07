@@ -81,6 +81,8 @@ def login():
 def index():
     auth = session.get('auth')
     if auth:
+        user:User = User.query.filter_by(email=auth.get('email')).first()
+        print(user.get_index())
         return render_template('index.html')
     else:
         return redirect('/login')

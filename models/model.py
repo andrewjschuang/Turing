@@ -1,5 +1,5 @@
 from models.shared import db
-
+from time import time
 
 sub_tasks = db.Table('sub_tasks',
                      db.Column('task_id', db.Integer, db.ForeignKey(
@@ -12,6 +12,7 @@ sub_tasks = db.Table('sub_tasks',
 class Task(db.Model):
     """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
+    changed_at = db.Column(db.Float(), default=time(), primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
@@ -37,6 +38,7 @@ user_tasks = db.Table('task_user',
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    changed_at = db.Column(db.Float(), default=time(), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
@@ -51,6 +53,21 @@ class User(db.Model):
             db.session.commit()
         else:
             raise Exception()
+    
+    def get_index(self):
+        tasks = []
+        projects = []
+        for count, task in enumerate(sorted(self.tasks, key=(lambda x:x.end_time))):
+            if count >= 5:
+                break
+            else:
+                tasks.append(task)
+        for count, project in enumerate(sorted(self.project, key=(lambda x:x.name))):
+            if count >= 5:
+                break
+            else:
+                projects.append(project)
+        return (tasks, projects)
 
 
 project_tasks = db.Table('project_tasks',
@@ -72,6 +89,7 @@ class Project(db.Model):
     """Project Class contains link to the user that interact with this project,
         the top level tasks related to id"""
     id = db.Column(db.Integer, primary_key=True)
+    changed_at = db.Column(db.Float(), default=time(), primary_key=True)
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',

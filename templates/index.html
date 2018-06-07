@@ -1,4 +1,21 @@
-{% extends "sidebar.html" %} {% block style%} {{ super() }} {% endblock %} {% block sidebar%} {{ super() }} {% endblock %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+{% extends "sidebar.html" %}
+
+{% block content %}
+  <div class="row">
+      <div class="tile_column">
+        <div class="tile_content">ola</div>
+        <div class="tile_content">ola</div>
+      </div>
+      <div class="tile_column">
+        <div class="tile_content">ola</div>
+      </div>
+      <div class="tile_column">
+        <div class="tile_content">ola</div>
+      </div>
+      <div class="tile_column">
+        <div class="tile_content">ola</div>
+      </div>
+    </div>
+  {% endblock %}
+  
