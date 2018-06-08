@@ -3,13 +3,26 @@
 {% block content %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/draggable.css') }}">
-  
+
 
 <div class="draggable" id="projetos" style="background-color:lightblue; top:10%; left:10%;">
-  Projects
-  {% for project in projects %}
-    <div id="projetosheader"></div>
-  {% endfor %}
+  <div class="dragable_header">
+        <h3>To-Do</h3>
+      </div>
+    <div class="draggable_content">
+    {% for project in projects %}
+    <div class="tile" 
+      style="height:{{100.0/loop.length}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/loop.length}}%;">
+      {{project}}
+    </div>    
+    {% endfor %}
+    <div class="tile" 
+      style="height:{{100.0/3}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/3}}%;">
+        <a class='link' href="/projects?new">
+          <i class="material-icons">add</i>
+        </a>
+    </div>
+  </div>
 </div>
 
 <div class="draggable" id="forum" style="background-color:lightblue; top:20%; left:20%">
@@ -24,10 +37,17 @@
 </div>
 
 <div class="draggable" id="tarefas" style="background-color:lightblue; top:40%; left:40%">
-  To-Do
-  {% for task in tasks %}
-    <li>{{task}}</li>    
-  {% endfor %}
+  <div class="dragable_header">
+    <h3>To-Do</h3>
+  </div>
+  <div class="draggable_content">
+    {% for task in tasks %}
+      <div class="tile" 
+        style="height:{{100.0/loop.length}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/loop.length}}%;">
+          {{task}}
+        </div>    
+    {% endfor %}
+  </div>
  
 </div>
 

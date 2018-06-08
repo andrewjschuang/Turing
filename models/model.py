@@ -67,7 +67,7 @@ class User(db.Model):
                 break
             else:
                 projects.append(project)
-        return {'tasks': ['t1','t2','t3'], 'projects':projects}
+        return {'tasks': ['t1','t2','t3', 't4', 't5'], 'projects':['p1', 'p2', 'p3']}
 
 
 project_tasks = db.Table('project_tasks',

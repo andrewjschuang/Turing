@@ -95,9 +95,9 @@ def projects():
         user:User = User.query.filter_by(email=auth.get('email')).first()
         info = user.get_index_data()
 
-        return render_template('projects.html')
+        return render_template('projects.html', **info)
     else:
-        return redirect('/login', **info)
+        return redirect('/login')
 
 
 

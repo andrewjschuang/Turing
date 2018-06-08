@@ -75,3 +75,7 @@ html *
     margin-left: 12.5%;
     padding: 0px 10px;
 }
+
+.tile {
+    text-align: center;
+}
