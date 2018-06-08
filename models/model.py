@@ -54,7 +54,7 @@ class User(db.Model):
         else:
             raise Exception()
     
-    def get_index(self):
+    def get_index_data(self):
         tasks = []
         projects = []
         for count, task in enumerate(sorted(self.tasks, key=(lambda x:x.end_time))):
@@ -67,7 +67,7 @@ class User(db.Model):
                 break
             else:
                 projects.append(project)
-        return (tasks, projects)
+        return {'tasks': ['t1','t2','t3'], 'projects':projects}
 
 
 project_tasks = db.Table('project_tasks',

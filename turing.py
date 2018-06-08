@@ -82,10 +82,24 @@ def index():
     auth = session.get('auth')
     if auth:
         user:User = User.query.filter_by(email=auth.get('email')).first()
-        print(user.get_index())
-        return render_template('index.html')
+        info = user.get_index_data()
+        print(info)
+        return render_template('index.html', **info)
     else:
         return redirect('/login')
+
+@app.route('/projects')
+def projects():
+    auth = session.get('auth')
+    if auth:
+        user:User = User.query.filter_by(email=auth.get('email')).first()
+        info = user.get_index_data()
+
+        return render_template('projects.html')
+    else:
+        return redirect('/login', **info)
+
+
 
 
 @app.route('/logout', methods=['GET'])

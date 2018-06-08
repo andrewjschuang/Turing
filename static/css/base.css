@@ -10,7 +10,7 @@ html *
     padding: 0px;
     margin: 0px 0;
     height: 100%;
-    z-index: 1;
+    z-index: 99;
 }
 
 .vertical-menu .column {

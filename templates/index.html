@@ -1,24 +1,34 @@
-
 {% extends "sidebar.html" %}
 
 {% block content %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/draggable.css') }}">
+  
 
-<div id="projetos">
-  <div id="projetosheader">Projetos</div>
+<div class="draggable" id="projetos" style="background-color:lightblue; top:10%; left:10%;">
+  Projects
+  {% for project in projects %}
+    <div id="projetosheader"></div>
+  {% endfor %}
 </div>
 
-<div id="forum">
-  <div id="forumheader">Fórum</div>
+<div class="draggable" id="forum" style="background-color:lightblue; top:20%; left:20%">
+  <div class="" id="forumheader">Forum</div>
 </div>
 
-<div id="code_preview">
-  <div id="code_previewheader">Code Preview</div>
+<div class="draggable" id="code_preview" style="background-color:lightblue; top:30%; left:30%">
+  Code Preview
+  <div class="tiles-grid">
+      ...
+  </div>
 </div>
 
-<div id="tarefas">
-  <div id="tarefasheader">Tarefas</div>
+<div class="draggable" id="tarefas" style="background-color:lightblue; top:40%; left:40%">
+  To-Do
+  {% for task in tasks %}
+    <li>{{task}}</li>    
+  {% endfor %}
+ 
 </div>
 
 <script src="{{ url_for('static', filename='js/draggable.js') }}"></script>
