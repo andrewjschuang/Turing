@@ -1,9 +1,13 @@
 {% extends "sidebar.html" %}
 
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/draggable.css')}}">
+{% endblock %}
+
 {% block content %}
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/draggable.css') }}">
-
+{{super()}}
 
 <div class="draggable" id="projetos" style="background-color:lightblue; top:10%; left:10%;">
   <div class="dragable_header">

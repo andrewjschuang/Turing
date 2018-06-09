@@ -1,14 +1,21 @@
-from flask import Flask, abort, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
-from sqlalchemy.exc import IntegrityError
-from models.shared import db
-from models.model import User
 import time
 
+from flask import (Flask, abort, flash, redirect, render_template, request,
+                   session, url_for)
+from flask_bootstrap import Bootstrap
+from sqlalchemy.exc import IntegrityError
+from wtforms import (Form, StringField, SubmitField, TextAreaField, TextField,
+                     validators)
+
+from models.model import User
+from models.shared import db
+
 app = Flask(__name__)
+Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 db.init_app(app)
+
 
 
 class SignUp(Form):
@@ -94,10 +101,8 @@ def projects():
     if auth:
         user:User = User.query.filter_by(email=auth.get('email')).first()
         info = user.get_index_data()
-
         return render_template('projects.html', **info)
-    else:
-        return redirect('/login')
+    return redirect('/login')
 
 
 
