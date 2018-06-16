@@ -88,21 +88,24 @@ def login():
 def index():
     auth = session.get('auth')
     if auth:
-        user:User = User.query.filter_by(email=auth.get('email')).first()
+        user: User = User.query.filter_by(email=auth.get('email')).first()
         info = user.get_index_data()
         print(info)
         return render_template('index.html', **info)
-    else:
-        return redirect('/login')
+    return redirect('/login')
 
 @app.route('/projects')
 def projects():
     auth = session.get('auth')
     if auth:
-        user:User = User.query.filter_by(email=auth.get('email')).first()
+        user: User = User.query.filter_by(email=auth.get('email')).first()
         info = user.get_index_data()
         return render_template('projects.html', **info)
     return redirect('/login')
+
+@app.route('/test', methods=['GET'])
+def test():
+    return render_template('components/modal_ntask.html')
 
 
 

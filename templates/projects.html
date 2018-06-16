@@ -1,23 +1,3 @@
-{% extends "sidebar.html" %}
-{% block content %}
-    {{super()}}
-    <div class="dashboard">
-        <div class="dashboard_header">
-            <h2>Projects</h2>
-        </div>
-        <div class="tiles">
-            {% for project in projects %}
-            <div class="tile" 
-                style="height:{{100.0/loop.length}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/loop.length}}%;">
-                {{project}}
-            </div>    
-            {% endfor %}
-            <div class="tile" 
-                style="height:{{100.0/3}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/3}}%;">
-                <a class='link' href="/projects?new">
-                    <i class="material-icons">add</i>
-                </a>
-            </div>
-        </div>
-    </div>
+{% extends "sidebar.html" %} 
+{% block content %} 
 {% endblock %}
