@@ -1,13 +1,10 @@
-{% block styles %}
+{% macro modalNewTask(modelId, formId) %}
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css"> 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 
-{% endblock %}
-
-{% block content %}
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="{{modelId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -17,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="newTaskForm" method="post" role="form">
+        <form id="{{formId}}" method="post" role="form">
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Task Name:</label>
             <input type="text" class="form-control" id="recipient-name">
@@ -48,9 +45,9 @@
 
 <script type="text/javascript">
   function form_submit() {
-    document.getElementById("newTaskForm").submit();
-    }    
+    document.getElementById("{{formId}}").submit();
+  }    
 </script>
-{% endblock %}
+{% endmacro %}
 
   

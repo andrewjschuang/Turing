@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block styles %} {{super()}}
 <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/sidebar.css')}}"> {% endblock %} {% block content %}
 <div class="nav-side-menu">
-  <div class="brand">Brand Logo</div>
+  <img src="{{ url_for('static', filename='img/turing.jpg')}}" style="width:100%"class="brand"></img>
   <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
 
   <div class="menu-list">
