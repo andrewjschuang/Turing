@@ -54,6 +54,13 @@ class User(db.Model):
         else:
             raise Exception()
     
+    def get_project_grid(self, n):
+        grid = []
+        for i in range(0, len(self.project), n):
+            grid.append(self.project[i:i + n])
+        return grid
+
+
     def get_index_data(self):
         tasks = []
         projects = []

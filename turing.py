@@ -92,20 +92,16 @@ def index():
         info = user.get_index_data()
         print(info)
         return render_template('index.html', **info)
-    else:
-        return redirect('/login')
+    return redirect('/login')
 
 @app.route('/projects')
 def projects():
     auth = session.get('auth')
     if auth:
-        user:User = User.query.filter_by(email=auth.get('email')).first()
-        info = user.get_index_data()
-        return render_template('projects.html', **info)
+        user: User = User.query.filter_by(email=auth.get('email')).first()
+        grid = user.get_project_grid(4)
+        return render_template('projects.html', projectgrid=grid)
     return redirect('/login')
-
-
-
 
 @app.route('/logout', methods=['GET'])
 def logout():

@@ -1,23 +1,43 @@
-{% extends "sidebar.html" %}
+{% extends "sidebar.html" %} 
+{% block styles %}
+{{super()}}
+{% endblock %}
+
 {% block content %}
-    {{super()}}
-    <div class="dashboard">
-        <div class="dashboard_header">
-            <h2>Projects</h2>
+{{super()}}
+{% endblock %}
+
+{% block sidecontent %}
+{{super()}}
+{% for projectrow in projectgrid %}
+<div class="row">
+  {% for project in projectrow %}
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{project.name}}</h5>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0"
+            aria-valuemax="100"></div>
         </div>
-        <div class="tiles">
-            {% for project in projects %}
-            <div class="tile" 
-                style="height:{{100.0/loop.length}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/loop.length}}%;">
-                {{project}}
-            </div>    
-            {% endfor %}
-            <div class="tile" 
-                style="height:{{100.0/3}}%; width:{{100.0/3}}%; max-width:{{100.0/3}}%; max-height:{{100.0/3}}%;">
-                <a class='link' href="/projects?new">
-                    <i class="material-icons">add</i>
-                </a>
-            </div>
-        </div>
+        <p class="card-text">{{project.description}}</p>
+        <button type="button" class="btn btn-primary">
+          Tarefas
+          <span class="badge badge-light">{{len(project.tasks)}}</span>
+        </button>
+      </div>
     </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div>
+  <br/>
+  <center>
+    <button type="button" class="btn btn-primary btn-lg">Create New Project</button>
+  </center>
+</div>
+
 {% endblock %}
