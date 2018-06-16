@@ -99,16 +99,13 @@ def projects():
     auth = session.get('auth')
     if auth:
         user: User = User.query.filter_by(email=auth.get('email')).first()
-        info = user.get_index_data()
-        return render_template('projects.html', **info)
+        grid = user.get_project_grid(4)
+        return render_template('projects.html', projectgrid=grid)
     return redirect('/login')
 
 @app.route('/test', methods=['GET'])
 def test():
     return render_template('components/modal_ntask.html')
-
-
-
 
 @app.route('/logout', methods=['GET'])
 def logout():
