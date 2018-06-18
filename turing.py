@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from wtforms import (Form, StringField, SubmitField, TextAreaField, TextField,
                      validators)
 
-from models.model import User
+from models.model import User, Project
 from models.shared import db
 
 app = Flask(__name__)
@@ -94,11 +94,19 @@ def index():
         return render_template('index.html', **info)
     return redirect('/login')
 
-@app.route('/projects')
+@app.route('/projects', methods=['GET', 'POST'])
 def projects():
     auth = session.get('auth')
     if auth:
         user: User = User.query.filter_by(email=auth.get('email')).first()
+        if request.method == 'POST':
+            name = request.form['projectName']
+            description = request.form['projectDescription']
+            pro = Project(name=name,description=description) 
+            db.session.add(pro)
+            user.project.append(pro)
+            db.session.commit()
+        
         grid = user.get_project_grid(4)
         return render_template('projects.html', projectgrid=grid)
     return redirect('/login')

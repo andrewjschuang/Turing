@@ -16,12 +16,12 @@
       <div class="modal-body">
         <form id="{{formId}}" method="post" role="form">
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Project Name:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <label for="projectName"  class="col-form-label">Project Name:</label>
+            <input type="text" class="form-control" id="projectName">
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Description:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <label for="projectDescription" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="projectDescription"></textarea>
           </div>
         </form>
       </div>
@@ -35,9 +35,18 @@
 </div>
 
 <script type="text/javascript">
-  function form_submit() {
-    document.getElementById("{{formId}}").submit();
-  }    
+  function form_submit(){
+    var projectName = $('#projectName').val();
+    var projectDescription = $('#projectDescription').val();
+    $.ajax({
+      type:'POST',
+      url:'#',
+      data:'projectName='+projectName+'&projectDescription='+projectDescription,
+      success:function(){
+        location.reload();
+      }
+    })
+  }
 </script>
 {% endmacro %}
 

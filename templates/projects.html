@@ -27,7 +27,7 @@
         <p class="card-text">{{project.description}}</p>
         <button type="button" class="btn btn-primary">
           Tarefas
-          <span class="badge badge-light">{{len(project.tasks)}}</span>
+          <span class="badge badge-light">{{project.tasks|length}}</span>
         </button>
       </div>
     </div>
