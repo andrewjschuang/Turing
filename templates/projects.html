@@ -1,5 +1,7 @@
 {% extends "sidebar.html" %} 
 
+{% from 'components/modal_nproj.html' import modalNewProject %}
+
 {% block styles %}
 {{super()}}
 {% endblock %}
@@ -10,6 +12,7 @@
 
 {% block sidecontent %}
 {{super()}}
+
 {% for projectrow in projectgrid %}
 <div class="row">
   {% for project in projectrow %}
@@ -24,7 +27,7 @@
         <p class="card-text">{{project.description}}</p>
         <button type="button" class="btn btn-primary">
           Tarefas
-          <span class="badge badge-light">{{len(project.tasks)}}</span>
+          <span class="badge badge-light">{{project.tasks|length}}</span>
         </button>
       </div>
     </div>
@@ -37,7 +40,8 @@
 <div>
   <br/>
   <center>
-    <button type="button" class="btn btn-primary btn-lg">Create New Project</button>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Create New Project</button>
+    {{modalNewProject("modal","form")}}
   </center>
 </div>
 {% endblock %}

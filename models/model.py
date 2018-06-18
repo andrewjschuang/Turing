@@ -96,7 +96,7 @@ class Project(db.Model):
     """Project Class contains link to the user that interact with this project,
         the top level tasks related to id"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.Float(), default=time(), primary_key=True)
+    changed_at = db.Column(db.Float(), default=time())
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',
