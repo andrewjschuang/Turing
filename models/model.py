@@ -12,7 +12,7 @@ sub_tasks = db.Table('sub_tasks',
 class Task(db.Model):
     """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now())
+    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
@@ -38,7 +38,7 @@ user_tasks = db.Table('task_user',
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now(), unique=True, nullable=False)
+    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     email = db.Column(db.String(80), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
@@ -96,7 +96,7 @@ class Project(db.Model):
     """Project Class contains link to the user that interact with this project,
         the top level tasks related to id"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now())
+    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(250))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',
