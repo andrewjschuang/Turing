@@ -1,2 +1,4 @@
 /bin/
 /.mypy*
+__pycache__/*
+*.pyc
