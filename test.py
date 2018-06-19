@@ -39,12 +39,34 @@ class MyTest(TestCase):
         db.session.commit()
         assert project in db.session
         
-
     def test_task(self):
         task =  Task(name='n', description='desc')
         db.session.add(task)
         db.session.commit()
         assert task in db.session
+
+    def test_usr_add_tsk2_prj(self):
+        user = User(email='em', username='us', password='pass')
+        db.session.add(user)
+        db.session.commit()
+        
+        project = Project(name='n',description='desc')
+        db.session.add(project)
+        user.project.append(project)
+        db.session.commit()
+
+        project: Project= User.query.filter_by(email='em').first().project[0]
+
+        task = Task(name='n', description='desc')
+        db.session.add(task)
+
+        project.tasks.append(task)
+        db.session.commit()
+
+        assert user.project[0].tasks[0] == task
+       
+        
+
 
 
 if __name__ == '__main__':
