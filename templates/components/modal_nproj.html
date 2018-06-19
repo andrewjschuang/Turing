@@ -1,10 +1,10 @@
-{% macro modalNewProject(modelId, formId) %}
+{% macro modalNewProject(modalId) %}
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css"> 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 
-<div class="modal fade" id="{{modelId}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div id="{{modalId}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -14,7 +14,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="{{formId}}" method="post" role="form">
+        <form method="post" role="form">
           <div class="form-group">
             <label for="projectName"  class="col-form-label">Project Name:</label>
             <input type="text" class="form-control" id="projectName">
@@ -40,7 +40,7 @@
     var projectDescription = $('#projectDescription').val();
     $.ajax({
       type:'POST',
-      url:'#',
+      url:'/projects',
       data:'projectName='+projectName+'&projectDescription='+projectDescription,
       success:function(){
         location.reload();

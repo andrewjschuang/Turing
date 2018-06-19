@@ -1,17 +1,15 @@
 import time
-
+from datetime import datetime
 from flask import (Flask, abort, flash, redirect, render_template, request,
                    session, url_for)
-#from flask_bootstrap import Bootstrap
 from sqlalchemy.exc import IntegrityError
 from wtforms import (Form, StringField, SubmitField, TextAreaField, TextField,
                      validators)
 
-from models.model import User, Project
+from models.model import User, Project, Task
 from models.shared import db
 
 app = Flask(__name__)
-#Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 db.init_app(app)
@@ -89,6 +87,9 @@ def index():
     auth = session.get('auth')
     if auth:
         user: User = User.query.filter_by(email=auth.get('email')).first()
+        if not user:
+            session['auth'] = {}
+            return redirect('/login')
         info = user.get_index_data()
         print(info)
         return render_template('index.html', **info)
@@ -99,6 +100,9 @@ def projects():
     auth = session.get('auth')
     if auth:
         user: User = User.query.filter_by(email=auth.get('email')).first()
+        if not user:
+            session['auth'] = {}
+            return redirect('/login')
         if request.method == 'POST':
             name = request.form['projectName']
             description = request.form['projectDescription']
@@ -110,6 +114,49 @@ def projects():
         grid = user.get_project_grid(4)
         return render_template('projects.html', projectgrid=grid)
     return redirect('/login')
+
+@app.route('/tasks/<string:kind>/<int:ref>', methods=['GET', 'POST'])
+def tasks(kind, ref):
+    auth = session.get('auth')
+    if auth:
+        user: User = User.query.filter_by(email=auth.get('email')).first()
+        if not user:
+            session['auth'] = {}
+            return redirect('/login')
+        if request.method == 'POST':
+            name = request.form.get('taskName')
+            description = request.form.get('taskDescription')
+            t_time = request.form.get('taskTime')
+            if not all((name, description, t_time)):
+               abort(404)
+            t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
+            n_task: Task = Task(name=name, description=description, end_time=t_time)
+            if kind == 'user':
+                user: User = User.query_filter_by(id=ref).first()
+                if not user:
+                    abort(404)
+                else:
+                    user.tasks.append(n_task)
+                    db.session.commit()
+            elif kind == 'project':
+                project: Project = Project.query_filter_by(id=ref).first()
+                if not project:
+                    abort(404)
+                else:
+                    project.tasks.append(n_task)
+                    db.session.commit()
+            elif kind == 'task':
+                task: Task = Task.query_filter_by(id=ref).first()
+                if not task:
+                    abort(404)
+                else:
+                    task.tasks.append(n_task)
+                    db.session.commit()
+            else:
+                abort(404)
+            abort(200)
+        else:
+            pass
 
 @app.route('/test', methods=['GET'])
 def test():
