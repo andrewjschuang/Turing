@@ -12,7 +12,7 @@ sub_tasks = db.Table('sub_tasks',
 class Task(db.Model):
     """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now(), primary_key=True)
+    changed_at = db.Column(db.DateTime(), default=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
@@ -98,7 +98,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     changed_at = db.Column(db.DateTime(), default=datetime.now())
     name = db.Column(db.String(80))
-    description = db.Column(db.String(80))
+    description = db.Column(db.String(250))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',
                             backref=db.backref('project', lazy=True))
     users = db.relationship('User', secondary=project_users, lazy='subquery',
