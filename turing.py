@@ -2,7 +2,7 @@ import time
 
 from flask import (Flask, abort, flash, redirect, render_template, request,
                    session, url_for)
-from flask_bootstrap import Bootstrap
+#from flask_bootstrap import Bootstrap
 from sqlalchemy.exc import IntegrityError
 from wtforms import (Form, StringField, SubmitField, TextAreaField, TextField,
                      validators)
@@ -11,7 +11,7 @@ from models.model import User, Project
 from models.shared import db
 
 app = Flask(__name__)
-Bootstrap(app)
+#Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 db.init_app(app)
