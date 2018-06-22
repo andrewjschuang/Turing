@@ -115,7 +115,7 @@ def create_app(config=None):
                 user.project.append(pro)
                 db.session.commit()
             
-            grid = user.get_project_grid(4)
+            grid = user.get_project_grid(3)
             return render_template('projects.html', projectgrid=grid)
         return redirect('/login')
 
@@ -131,8 +131,8 @@ def create_app(config=None):
                 name = request.form.get('taskName')
                 description = request.form.get('taskDescription')
                 t_time = request.form.get('taskTime')
-            if not all((name, description, t_time)):
-                abort(404)
+                if not all((name, description, t_time)):
+                    abort(404)
             t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
             n_task: Task = Task(name=name, description=description, end_time=t_time)
             if kind == 'user':
