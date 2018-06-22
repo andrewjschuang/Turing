@@ -119,48 +119,65 @@ def create_app(config=None):
             return render_template('projects.html', projectgrid=grid)
         return redirect('/login')
 
-    @app.route('/tasks/<string:kind>/<int:ref>', methods=['GET', 'POST'])
-    def tasks(kind, ref):
+
+    @app.route('/tasks/user')
+    @app.route('/tasks/user/<int:ref>', methods=['GET', 'POST'])
+    def user_tasks(ref=None):
         auth = session.get('auth')
         if auth:
             user: User = User.query.filter_by(email=auth.get('email')).first()
             if not user:
                 session['auth'] = {}
                 return redirect('/login')
+            if ref:
+                user: User = User.query.filter_by(id=ref).first()
+            if not user:
+                return abort(404)
             if request.method == 'POST':
                 name = request.form.get('taskName')
                 description = request.form.get('taskDescription')
                 t_time = request.form.get('taskTime')
                 if not all((name, description, t_time)):
                     abort(404)
-            t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
-            n_task: Task = Task(name=name, description=description, end_time=t_time)
-            if kind == 'user':
-                user: User = User.query_filter_by(id=ref).first()
-                if not user:
-                    abort(404)
-                else:
-                    user.tasks.append(n_task)
-                    db.session.commit()
-            elif kind == 'project':
-                project: Project = Project.query_filter_by(id=ref).first()
-                if not project:
-                    abort(404)
-                else:
-                    project.tasks.append(n_task)
-                    db.session.commit()
-            elif kind == 'task':
-                task: Task = Task.query_filter_by(id=ref).first()
-                if not task:
-                    abort(404)
-                else:
-                    task.tasks.append(n_task)
-                    db.session.commit()
+                t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
+                n_task: Task = Task(name=name, description=description, end_time=t_time)
+                user.tasks.append(n_task)
+                db.session.commit()
+                return abort(200)
             else:
-                abort(404)
-            abort(200)
-        else:
-            pass
+                return render_template('tasks.html', data=user)
+
+    @app.route('/tasks/project/<int:ref>', methods=['GET', 'POST'])
+    def proj_tasks(ref):
+        
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+            
+            project:Project = Project.query.filter_by(id=ref).first()
+            if not project:
+                return abort(404)
+            if request.method == 'POST':
+                name = request.form.get('taskName')
+                description = request.form.get('taskDescription')
+                t_time = request.form.get('taskDate')
+                print(name,description,t_time)
+                if not all((name, description, t_time)):
+                    abort(404)
+                t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
+                n_task: Task = Task(name=name, description=description, end_time=t_time)
+                
+                project.tasks.append(n_task)
+                user.tasks.append(n_task)
+                
+                db.session.commit()
+                return ('' ,200)
+            else:
+                print(project.tasks[0].users)
+                return render_template('tasks.html', data=project)
 
     @app.route('/test', methods=['GET'])
     def test():
