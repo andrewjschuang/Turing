@@ -16,7 +16,7 @@
 <h1>Tasks for {{data.name}}</h1>
 <div class="list-group" style="width: 50%;">
   {% for task in data.tasks %}
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <a href="/tasks/task/{{task.id}}" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{task.name}} </h5>
         <small>{{task.end_time}}</small>

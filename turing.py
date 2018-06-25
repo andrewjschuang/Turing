@@ -164,7 +164,6 @@ def create_app(config=None):
                 name = request.form.get('taskName')
                 description = request.form.get('taskDescription')
                 t_time = request.form.get('taskDate')
-                print(name,description,t_time)
                 if not all((name, description, t_time)):
                     abort(404)
                 t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
@@ -176,8 +175,43 @@ def create_app(config=None):
                 db.session.commit()
                 return ('' ,200)
             else:
-                print(project.tasks[0].users)
                 return render_template('tasks.html', data=project)
+
+    @app.route('/tasks/task/<int:ref>', methods=['GET', 'POST'])
+    def task_tasks(ref):
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+        
+            task:Task = Task.query.filter_by(id=ref).first()
+            
+            if not task:
+                return abort(404)
+            if request.method == 'POST':
+                name = request.form.get('taskName')
+                description = request.form.get('taskDescription')
+                t_time = request.form.get('taskDate')
+                if not all((name, description, t_time)):
+                    abort(404)
+                t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
+                n_task: Task = Task(name=name, description=description, end_time=t_time)
+
+                db.session.add(n_task)
+                task.tasks.append(n_task)
+                db.session.commit()
+
+                user.tasks.append(n_task)
+                
+                db.session.commit()
+                print(task, task.tasks)
+                print(n_task, n_task.tasks)
+                return ('' ,200)
+            else:
+                print(task, task.tasks)
+                return render_template('tasks.html', data=task)
 
     @app.route('/test', methods=['GET'])
     def test():
