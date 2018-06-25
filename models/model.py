@@ -1,31 +1,29 @@
 from models.shared import db
 from datetime import datetime
 
-sub_tasks = db.Table('sub_tasks',
-                     db.Column('task_id', db.Integer, db.ForeignKey(
-                         'task.id'), primary_key=True),
-                     db.Column('task_id', db.Integer, db.ForeignKey(
-                         'task.id'), primary_key=True)
-                     )
-
 
 class Task(db.Model):
+    __tablename__ = 'task'
+
     """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
     changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
-    tasks = db.relationship('Task', secondary=sub_tasks, lazy='subquery',
-                            backref=db.backref('super_task', lazy=True))
+    supertask = db.Column(db.Integer, db.ForeignKey('task.id'))
+    tasks = db.relationship('Task',
+                        # cascade deletions
+                        cascade="all",
 
-    def add_task(self, name, description, end_time):
-        """Adds subtasks to this taks"""
-        self.tasks.append(
-            Task(name=name, description=description, end_time=end_time)
-        )
-        db.session.update(self)
-        db.session.commit()
+                        # many to one + adjacency list - remote_side
+                        # is required to reference the 'remote' 
+                        # column in the join condition.
+                        backref=db.backref("parent", remote_side='Task.id'),
+
+                    ) 
+
+    
 
 
 user_tasks = db.Table('task_user',

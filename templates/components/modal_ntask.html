@@ -1,4 +1,4 @@
-{% macro modalNewTask(modalId, kind,reference) %}
+{% macro modalNewTask(modalId, kind, reference) %}
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css"> 
@@ -47,10 +47,11 @@
   function form_submit(){
     var taskName = $('#taskName').val();
     var taskDescription = $('#taskDescription').val();
-    var taskDate = $('#taskDate').getDate().toISOString();
+    var taskDate = $('#taskDate').datepicker('getDate').toISOString()
+    console.log(taskDate)
     $.ajax({
       type:'POST',
-      url:'tasks/{{kind}}/{{reference}}',
+      url:'{{reference}}',
       data:'taskName='+taskName+'&taskDescription='+taskDescription+'&taskDate='+taskDate,
       success:function(){
         location.reload();

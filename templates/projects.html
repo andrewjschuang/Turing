@@ -14,7 +14,7 @@
 {{super()}}
 
 {% for projectrow in projectgrid %}
-<div class="row">
+<div class="row" style="padding-top: 1%">
   {% for project in projectrow %}
   <div class="col-sm-4">
     <div class="card">
@@ -25,10 +25,10 @@
             aria-valuemax="100"></div>
         </div>
         <p class="card-text">{{project.description}}</p>
-        <button type="button" class="btn btn-primary">
+        <a href="/tasks/project/{{project.id}}" type="button" class="btn btn-primary">
           Tarefas
           <span class="badge badge-light">{{project.tasks|length}}</span>
-        </button>
+        </a>
       </div>
     </div>
   </div>
@@ -40,8 +40,8 @@
 <div>
   <br/>
   <center>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Create New Project</button>
-    {{modalNewProject("modal")}}
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#projModal">Create New Project</button>
   </center>
 </div>
+{{modalNewProject("projModal")}}
 {% endblock %}

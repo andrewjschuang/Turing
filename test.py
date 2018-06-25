@@ -64,6 +64,23 @@ class MyTest(TestCase):
         db.session.commit()
 
         assert user.project[0].tasks[0] == task
+
+    def test_sub_tasks(self):
+        task = Task(name='n', description='desc')
+        db.session.add(task)
+        assert task in db.session
+
+        s_task = Task(name='n', description='desc')
+        db.session.add(s_task)
+        assert task in db.session
+
+        db.session.commit()
+        task.tasks.append(s_task)
+
+        
+        db.session.commit()
+        assert task.tasks[0] == s_task
+
        
         
 
