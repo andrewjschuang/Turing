@@ -1,7 +1,7 @@
 from flask_testing import TestCase
 
 from models.shared import db
-from models.model import User, Task, Project
+from models.model import User, Task, Project, Question, Response, Questionnaire
 from turing import create_app
 
 import unittest
@@ -65,6 +65,7 @@ class MyTest(TestCase):
 
         assert user.project[0].tasks[0] == task
 
+
     def test_sub_tasks(self):
         task = Task(name='n', description='desc')
         db.session.add(task)
@@ -80,6 +81,28 @@ class MyTest(TestCase):
         
         db.session.commit()
         assert task.tasks[0] == s_task
+    
+    def test_questionnaire(self):
+        questionnaire = Questionnaire(name='Questions')
+        db.session.add(questionnaire)
+
+        question0 = Question(text="ola ?", questionnaire=questionnaire)
+        question1 = Question(text="tudo bem ?", questionnaire=questionnaire)
+
+        questionnaire.questions.append(question0)
+        questionnaire.questions.append(question1)
+
+        for i in range(10):
+            question0.responses.append(Response(rating=5,question=question0))
+
+        for i in range(10):
+            question1.responses.append(Response(rating=5,question=question1))
+
+        rs = [x.rating for x in questionnaire.questions[0].responses]
+        assert sum(rs)/len(rs) == 5
+
+        rs = [x.rating for x in questionnaire.questions[1].responses]
+        assert sum(rs)/len(rs) == 5
 
        
         

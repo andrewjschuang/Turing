@@ -122,12 +122,22 @@ class Project(db.Model):
         else:
             raise Exception()
 
+class Response(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, nullable=False)
+    question = db.Column(db.Integer, db.ForeignKey('question.id'))
+
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(255), nullable=False, unique=True)
+    responses = db.relationship('Response', backref='myquestion', lazy=True)
+    questionnaire = db.Column(db.Integer, db.ForeignKey('questionnaire.id'))
+
+
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    functionality = db.Column(db.String(80))
-    description = db.Column(db.String(80))
-    rating = db.Column(db.Integer)
-    review = db.Column(db.String(80))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', lazy='subquery',
-                            backref=db.backref('questionnaire', lazy=True))
+    name = db.Column(db.String(64), nullable=False)
+    questions = db.relationship('Question',backref='myquestionnaire',lazy=True)
+
+
+
