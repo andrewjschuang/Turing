@@ -111,9 +111,10 @@ def create_app(config=None):
                 session['auth'] = {}
                 return redirect('/login')
         if request.method == 'POST':
-            functionality = request.form['functionality']
-            rating = request.form['rating']
-            review = request.form['review']
+            print(request.form)
+            functionality = request.form.get('functionality')
+            rating = request.form.get('rating')
+            review = request.form.get('review')
             description = functionalities[functionality]
             quest = Questionnaire(functionality=functionality, description=description, rating=rating, review=review, user=user)
             db.session.add(quest)
