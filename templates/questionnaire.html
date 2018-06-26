@@ -1,0 +1,47 @@
+{% extends "sidebar.html" %} 
+
+{% from 'components/modal_nproj.html' import modalNewQuestionnaire %}
+
+{% block styles %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
+{{super()}}
+{% endblock %}
+
+{% block sidecontent %}
+{{super()}}
+
+{% for questionnairerow in questionnairegrid %}
+<div class="row">
+  {% for questionnaire in questionnairerow %}
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{questionnaire.name}}</h5>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0"
+            aria-valuemax="100"></div>
+        </div>
+        <p class="card-text">{{questionnaire.description}}</p>
+        <button type="button" class="btn btn-primary">
+          Perguntas
+          <span class="badge badge-light">{{questionnaire.questions|length}}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div>
+  <br/>
+  <center>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Fill a Questionnaire</button>
+    {{modalNewQuestionnaire("modal")}}
+  </center>
+</div>
+{% endblock %}
