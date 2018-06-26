@@ -1,0 +1,47 @@
+{% extends "sidebar.html" %} 
+
+{% from 'components/modal_nsug.html' import modalNewSuggestion
+
+{% block styles %}
+{{super()}}
+{% endblock %}
+
+{% block content %}
+{{super()}}
+{% endblock %}
+
+{% block sidecontent %}
+{{super()}} %}
+
+{% for suggestionrow in suggestiongrid %}
+<div class="row">
+  {% for suggestion in suggestionrow %}
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{suggestion.name}}</h5>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0"
+            aria-valuemax="100"></div>
+        </div>
+        <p class="card-text">{{suggestion.description}}</p>
+        <button type="button" class="btn btn-primary">
+          Sugestões
+          <span class="badge badge-light">{{suggestion.tasks|length}}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div>
+  <br/>
+  <center>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Make New Suggestion</button>
+    {{modalNewSuggestion("modal")}}
+  </center>
+</div>
+{% endblock %}
