@@ -3,11 +3,13 @@ from datetime import datetime
 from flask import (Flask, abort, flash, redirect, render_template, request,
                    session, url_for)
 from sqlalchemy.exc import IntegrityError
-from wtforms import (Form, StringField, SubmitField, TextAreaField, TextField,
+from wtforms import (Form, RadioField, StringField, SubmitField, TextAreaField, TextField,
                      validators)
 
-from models.model import User, Project, Task
+from models.model import User, Project, Task, Questionnaire
 from models.shared import db
+
+from functionalities import functionalities
 
 class SignUp(Form):
     name = TextField('Name:', validators=[validators.required()])
@@ -31,7 +33,7 @@ def create_app(config=None):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///prod.db'
         app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-    
+
     db.init_app(app)
 
 
@@ -99,6 +101,26 @@ def create_app(config=None):
             return render_template('index.html', **info)
         return redirect('/login')
 
+    @app.route('/feedback', methods=['GET', 'POST'])
+    def feedback():
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+        if request.method == 'POST':
+            functionality = request.form['functionality']
+            rating = request.form['rating']
+            review = request.form['review']
+            description = functionalities[functionality]
+            quest = Questionnaire(functionality=functionality, description=description, rating=rating, review=review, user=user)
+            db.session.add(quest)
+            db.session.commit()
+            return render_template('feedback_received.html')
+        return render_template('feedback.html', functionalities=functionalities)
+
     @app.route('/projects', methods=['GET', 'POST'])
     def projects():
         auth = session.get('auth')
@@ -110,11 +132,11 @@ def create_app(config=None):
             if request.method == 'POST':
                 name = request.form['projectName']
                 description = request.form['projectDescription']
-                pro = Project(name=name,description=description) 
+                pro = Project(name=name,description=description)
                 db.session.add(pro)
                 user.project.append(pro)
                 db.session.commit()
-            
+
             grid = user.get_project_grid(3)
             return render_template('projects.html', projectgrid=grid)
         return redirect('/login')
@@ -149,14 +171,14 @@ def create_app(config=None):
 
     @app.route('/tasks/project/<int:ref>', methods=['GET', 'POST'])
     def proj_tasks(ref):
-        
+
         auth = session.get('auth')
         if auth:
             user: User = User.query.filter_by(email=auth.get('email')).first()
             if not user:
                 session['auth'] = {}
                 return redirect('/login')
-            
+
             project:Project = Project.query.filter_by(id=ref).first()
             if not project:
                 return abort(404)
@@ -168,10 +190,10 @@ def create_app(config=None):
                     abort(404)
                 t_time = datetime.strptime(t_time,'%Y-%m-%dT%H:%M:%S.%fZ')
                 n_task: Task = Task(name=name, description=description, end_time=t_time)
-                
+
                 project.tasks.append(n_task)
                 user.tasks.append(n_task)
-                
+
                 db.session.commit()
                 return ('' ,200)
             else:
@@ -185,9 +207,9 @@ def create_app(config=None):
             if not user:
                 session['auth'] = {}
                 return redirect('/login')
-        
+
             task:Task = Task.query.filter_by(id=ref).first()
-            
+
             if not task:
                 return abort(404)
             if request.method == 'POST':
@@ -204,7 +226,7 @@ def create_app(config=None):
                 db.session.commit()
 
                 user.tasks.append(n_task)
-                
+
                 db.session.commit()
                 print(task, task.tasks)
                 print(n_task, n_task.tasks)
