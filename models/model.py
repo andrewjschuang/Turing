@@ -53,7 +53,7 @@ class User(db.Model):
             db.session.commit()
         else:
             raise Exception()
-    
+
     def get_project_grid(self, n):
         grid = []
         for i in range(0, len(self.project), n):
@@ -123,3 +123,13 @@ class Project(db.Model):
             db.session.commit()
         else:
             raise Exception()
+
+class Questionnaire(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    functionality = db.Column(db.String(80))
+    description = db.Column(db.String(80))
+    rating = db.Column(db.Integer)
+    review = db.Column(db.String(80))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', lazy='subquery',
+                            backref=db.backref('questionnaire', lazy=True))
