@@ -237,7 +237,7 @@ def create_app(config=None):
 
     @app.route('/test', methods=['GET'])
     def test():
-        return render_template('components/modal_ntask.html')
+        return render_template('newQuestionnaire.html')
 
     @app.route('/logout', methods=['GET'])
     def logout():
