@@ -99,7 +99,6 @@ def create_app(config=None):
             return render_template('index.html', **info)
         return redirect('/login')
 
-<<<<<<< HEAD
     # @app.route('/responses')
     # def responses():
     #     auth = session.get('auth')
@@ -114,45 +113,18 @@ def create_app(config=None):
 
     @app.route('/respond/<int:ref>', methods=['GET', 'POST'])
     def respond(ref):
-        # questionnaire = Questionnaire(name='Questions')
-        # db.session.add(questionnaire)
-        #
-        # question0 = Question(text="ola ?", questionnaire=questionnaire)
-        # question1 = Question(text="tudo bem ?", questionnaire=questionnaire)
-        #
-        # questionnaire.questions.append(question0)
-        # questionnaire.questions.append(question1)
-        try:
-            quest = Questionnaire.query.get(ref)
-        except:
+        quest = Questionnaire.query.get(ref)
+        if not quest:
             print('no questionnaire found with id %s' % ref)
             return abort(404)
         if request.method == 'GET':
             return render_template('feedback.html', name=quest.name, questions=quest.questions)
         elif request.method == 'POST':
-            rating = request.form.get('rating')
-            response = Response(rating=rating, question=quest)
-            db.session.add(response)
-=======
-    @app.route('/feedback', methods=['GET', 'POST'])
-    def feedback():
-        auth = session.get('auth')
-        if auth:
-            user: User = User.query.filter_by(email=auth.get('email')).first()
-            User.query.filter_by(email=auth.get('email')).first()
-            if not user:
-                session['auth'] = {}
-                return redirect('/login')
-        if request.method == 'POST':
-            print(request.form)
-            functionality = request.form.get('functionality')
-            rating = request.form.get('rating')
-            review = request.form.get('review')
-            description = functionalities[functionality]
-            quest = Questionnaire(functionality=functionality, description=description, rating=rating, review=review, user=user)
-            db.session.add(quest)
->>>>>>> 6eaf613e8d633325b24484fafe1abe33d027d122
-            db.session.commit()
+            for question_id in request.form:
+                question = Question.query.get(question_id)
+                resp = Response(question=question.id, rating=request.form.get(question_id))
+                db.session.add(resp)
+                db.session.commit()
             return render_template('feedback_received.html')
 
     @app.route('/projects', methods=['GET', 'POST'])
