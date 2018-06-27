@@ -99,6 +99,7 @@ def create_app(config=None):
             return render_template('index.html', **info)
         return redirect('/login')
 
+<<<<<<< HEAD
     # @app.route('/responses')
     # def responses():
     #     auth = session.get('auth')
@@ -132,6 +133,25 @@ def create_app(config=None):
             rating = request.form.get('rating')
             response = Response(rating=rating, question=quest)
             db.session.add(response)
+=======
+    @app.route('/feedback', methods=['GET', 'POST'])
+    def feedback():
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+        if request.method == 'POST':
+            print(request.form)
+            functionality = request.form.get('functionality')
+            rating = request.form.get('rating')
+            review = request.form.get('review')
+            description = functionalities[functionality]
+            quest = Questionnaire(functionality=functionality, description=description, rating=rating, review=review, user=user)
+            db.session.add(quest)
+>>>>>>> 6eaf613e8d633325b24484fafe1abe33d027d122
             db.session.commit()
             return render_template('feedback_received.html')
 
