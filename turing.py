@@ -6,10 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from wtforms import (Form, RadioField, StringField, SubmitField, TextAreaField, TextField,
                      validators)
 
-from models.model import User, Project, Task, Questionnaire
+from models.model import User, Project, Task, Questionnaire, Question, Response
 from models.shared import db
-
-from functionalities import functionalities
 
 class SignUp(Form):
     name = TextField('Name:', validators=[validators.required()])
@@ -101,8 +99,8 @@ def create_app(config=None):
             return render_template('index.html', **info)
         return redirect('/login')
 
-    @app.route('/feedback', methods=['GET', 'POST'])
-    def feedback():
+    @app.route('/responses')
+    def responses():
         auth = session.get('auth')
         if auth:
             user: User = User.query.filter_by(email=auth.get('email')).first()
@@ -110,16 +108,24 @@ def create_app(config=None):
             if not user:
                 session['auth'] = {}
                 return redirect('/login')
-        if request.method == 'POST':
-            functionality = request.form['functionality']
-            rating = request.form['rating']
-            review = request.form['review']
-            description = functionalities[functionality]
-            quest = Questionnaire(functionality=functionality, description=description, rating=rating, review=review, user=user)
-            db.session.add(quest)
-            db.session.commit()
+        quests = Questionnaire.query.all()
+        return render_template('responses.html', quests=quests)
+
+    @app.route('/respond/<int:ref>', methods=['GET', 'POST'])
+    def respond(ref):
+        quest = Questionnaire.query.get(ref)
+        if not quest:
+            print('no questionnaire found with id %s' % ref)
+            return abort(404)
+        if request.method == 'GET':
+            return render_template('feedback.html', name=quest.name, questions=quest.questions)
+        elif request.method == 'POST':
+            for question_id in request.form:
+                question = Question.query.get(question_id)
+                resp = Response(question=question.id, rating=request.form.get(question_id))
+                db.session.add(resp)
+                db.session.commit()
             return render_template('feedback_received.html')
-        return render_template('feedback.html', functionalities=functionalities)
 
     @app.route('/projects', methods=['GET', 'POST'])
     def projects():

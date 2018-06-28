@@ -17,13 +17,13 @@ class Task(db.Model):
                         cascade="all",
 
                         # many to one + adjacency list - remote_side
-                        # is required to reference the 'remote' 
+                        # is required to reference the 'remote'
                         # column in the join condition.
                         backref=db.backref("parent", remote_side='Task.id'),
 
-                    ) 
+                    )
 
-    
+
 
 
 user_tasks = db.Table('task_user',
@@ -133,11 +133,7 @@ class Question(db.Model):
     responses = db.relationship('Response', backref='myquestion', lazy=True)
     questionnaire = db.Column(db.Integer, db.ForeignKey('questionnaire.id'))
 
-
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
     questions = db.relationship('Question',backref='myquestionnaire',lazy=True)
-
-
-
