@@ -99,17 +99,21 @@ def create_app(config=None):
             return render_template('index.html', **info)
         return redirect('/login')
 
-    # @app.route('/responses')
-    # def responses():
-    #     auth = session.get('auth')
-    #     if auth:
-    #         user: User = User.query.filter_by(email=auth.get('email')).first()
-    #         User.query.filter_by(email=auth.get('email')).first()
-    #         if not user:
-    #             session['auth'] = {}
-    #             return redirect('/login')
-    #     quests = Questionnaire.query.all()
-    #     return render_template('responses.html', quests=quests)
+    @app.route('/responses')
+    def responses():
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+        # responses = Response.query.all()
+        quests = Questionnaire.query.all()
+        d = {}
+        # for quest in quests:
+        #     d[quest] = [resp for resp in responses if resp.question == quest.id]
+        return render_template('responses.html', quests=quests)
 
     @app.route('/respond/<int:ref>', methods=['GET', 'POST'])
     def respond(ref):

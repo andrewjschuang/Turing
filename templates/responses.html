@@ -1,0 +1,24 @@
+{% extends "sidebar.html" %}
+
+{% block sidecontent %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Responses</h1>
+</div>
+
+<div class="card">
+  {% for quest in quests %}
+    <div class="card-body">
+      <h4 class="card-title">Questionnaire {{ quest.id }}: {{ quest.name }}</h4>
+      {% for question in quest.questions %}
+        <h5>Question: {{ question.text }}</h5>
+        <ol>
+          {% for response in question.responses %}
+            <h6><li>Rating: {{ response.rating }}</li></h6>
+          {% endfor %}
+        </ol>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
