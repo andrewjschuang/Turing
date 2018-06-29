@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from wtforms import (Form, RadioField, StringField, SubmitField, TextAreaField, TextField,
                      validators)
 
-from models.model import User, Project, Task, Questionnaire
+from models.model import User, Project, Task, Questionnaire, Question
 from models.shared import db
 
 from functionalities import functionalities
@@ -257,15 +257,17 @@ def create_app(config=None):
             if not task:
                 return abort(404)
             if request.method == 'POST':
-                if request.form:
-                    for key, value in request.form.items():
-                        if not value:
-                            continue
-                        else:
-                            Questionnaire()
-
-                
-
+                name = request.form.get('name')
+                if not name:
+                    return abort(404)
+                quest = Questionnaire(name=name,task=task)
+                task.questionnaires.append(quest)
+                for key, value in request.form.items():
+                    if not value or key == 'name':
+                        continue
+                    else:
+                        quest.questions.append(Question(text=value,questionnaire=quest))
+                db.session.commit()
         return render_template('newQuestionnaire.html')
 
     @app.route('/logout', methods=['GET'])

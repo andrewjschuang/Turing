@@ -25,24 +25,36 @@
         {% for user in task.users %}
           <small href="#" class="badge badge-primary">{{user.username}}</small>
         {% endfor %}
-      <div/>
       {% for subtask in task.tasks %}
         <button class="btn btn-secondary" type="submit">{{subtask.name}}</button>
       {% endfor %}
     </a>
   {% endfor %}
-  {% if data.__class__.__name__ in ['Task', 'Project']  %}
-  <div>
-    <br/>
+  <center>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#taskModal">Create New Task</button>
+  </center>
+</div>
+{% if data.__class__.__name__ in ['Task', 'Project']  %}
+<div>
+  {% if data.__class__.__name__ == 'Task' %}
+  <div class="list-group" style="width: 50%;">
+      {% for questionnaire in data.questionnaires %}
+      <a href="/questionnaire/{{questionnaire.id}}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{questionnaire.name}}</h5>
+          <small>{{questionnaire.responses|length}}</small>
+        </div>
+      </a>
+    {% endfor %}
     <center>
-      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#taskModal">Create New Task</button>
-      {% if data.__class__.__name__ == 'Task' %}
-        <a type="button" class="btn btn-primary btn-lg" href="/questionnaire/{{data.id}}">Create Questionnaire</a>
-      {% endif %}
+      <a type="button" class="btn btn-primary btn-lg" href="/questionnaire/{{data.id}}">Create Questionnaire</a>
     </center>
   </div>
-  {{modalNewTask("taskModal",data.__class__.__name__,data.id)}}
+  
   {% endif %}
+</div>
+{{modalNewTask("taskModal",data.__class__.__name__,data.id)}}
+{% endif %}
 </div>
 
 {% endblock %}

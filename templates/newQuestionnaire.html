@@ -18,7 +18,10 @@
             <div class="controls"> 
                 <form role="form" autocomplete="off">
                     <div class="entry input-group col-sm-10">
-                        <input class="form-control" name="fields[]" type="text" placeholder="Type something"/>
+                        <input class="form-control" id="questio_name" type="text" placeholder="Give your Questionnaire a Name"/>
+                    </div>
+                    <div class="entry input-group col-sm-10">
+                        <input class="form-control" name="fields[]" type="text" placeholder="Type a question"/>
                     	<span class="input-group-btn">
                             <button class="btn btn-success btn-add" type="button">
                                 <span class="fas fa-plus-circle" style="font-size: 24px"></span>
@@ -63,6 +66,7 @@
     });
 
     function add(){
+        var name =  document.getElementById("questio_name").value;
         var form = Array.from(document.getElementsByName("fields[]"));
         var ret = "";
         for (var i = 0; i < form.length; i++){
@@ -74,7 +78,7 @@
         $.ajax({
             type:'POST',
             url:'',
-            data: ret,
+            data: "name="+name+"&"+ret,
             success:function(){
               location.reload();
             }
