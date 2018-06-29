@@ -19,6 +19,7 @@ class Task(db.Model):
         'Questionnaire', backref='taks', lazy=True)
 
 
+
 user_tasks = db.Table('task_user',
                       db.Column('task_id', db.Integer, db.ForeignKey(
                           'task.id'), primary_key=True),
@@ -128,7 +129,6 @@ class Question(db.Model):
     text = db.Column(db.String(255), nullable=False, unique=True)
     responses = db.relationship('Response', backref='myquestion', lazy=True)
     questionnaire = db.Column(db.Integer, db.ForeignKey('questionnaire.id'))
-
 
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
