@@ -47,13 +47,14 @@ def create_app(config=None):
         form = SignUp(request.form)
         if request.method == 'POST':
             if form.validate():
-                username = request.form['name']
+                
+                name = request.form['name']
                 password = request.form['password']
                 email = request.form['email']
-                u = User(email=email, username=username, password=password)
+                u = User(email=email, name=name, password=password)
                 db.session.add(u)
                 db.session.commit()
-                session['auth'] = {'name': username,
+                session['auth'] = {'name': name,
                                 'email': email, 'timestamp': time.time()}
                 return redirect(url_for('index'))
 
@@ -71,9 +72,11 @@ def create_app(config=None):
                 password = request.form['password']
                 email = request.form['email']
                 user = User.query.filter_by(email=email).first()
+                print(user)
                 if user:
+                    print(user)
                     if user.password == password:
-                        session['auth'] = {'name': user.username,
+                        session['auth'] = {'name': user.name,
                                         'email': user.email,
                                         'timestamp': time.time()
                                         }
@@ -237,6 +240,32 @@ def create_app(config=None):
 
     @app.route('/test', methods=['GET'])
     def test():
+        
+        return render_template('newQuestionnaire.html')
+
+    @app.route('/questionnaire/<int:ref>', methods=['GET', 'POST'])
+    def questionnaire(ref):
+        auth = session.get('auth')
+        if auth:
+            user: User = User.query.filter_by(email=auth.get('email')).first()
+            if not user:
+                session['auth'] = {}
+                return redirect('/login')
+            
+            task:Task = Task.query.filter_by(id=ref).first()
+
+            if not task:
+                return abort(404)
+            if request.method == 'POST':
+                if request.form:
+                    for key, value in request.form.items():
+                        if not value:
+                            continue
+                        else:
+                            Questionnaire()
+
+                
+
         return render_template('newQuestionnaire.html')
 
     @app.route('/logout', methods=['GET'])

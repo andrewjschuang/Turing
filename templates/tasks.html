@@ -36,6 +36,9 @@
     <br/>
     <center>
       <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#taskModal">Create New Task</button>
+      {% if data.__class__.__name__ == 'Task' %}
+        <a type="button" class="btn btn-primary btn-lg" href="/questionnaire/{{data.id}}">Create Questionnaire</a>
+      {% endif %}
     </center>
   </div>
   {{modalNewTask("taskModal",data.__class__.__name__,data.id)}}

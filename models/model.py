@@ -7,23 +7,16 @@ class Task(db.Model):
 
     """Task class contains subTasks"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
+    changed_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(80))
     end_time = db.Column(db.Date())
     supertask = db.Column(db.Integer, db.ForeignKey('task.id'))
-    tasks = db.relationship('Task',
-                        # cascade deletions
-                        cascade="all",
-
-                        # many to one + adjacency list - remote_side
-                        # is required to reference the 'remote' 
-                        # column in the join condition.
-                        backref=db.backref("parent", remote_side='Task.id'),
-
-                    ) 
-
-    
+    tasks = db.relationship('Task', cascade="all", backref=db.backref(
+        "parent", remote_side='Task.id'))
+    questionnaires = db.relationship(
+        'Questionnaire', backref='taks', lazy=True)
 
 
 user_tasks = db.Table('task_user',
@@ -36,9 +29,10 @@ user_tasks = db.Table('task_user',
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
+    changed_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     email = db.Column(db.String(80), unique=True, nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     tasks = db.relationship('Task', secondary=user_tasks, lazy='subquery',
                             backref=db.backref('users', lazy=True))
@@ -58,16 +52,15 @@ class User(db.Model):
             grid.append(self.project[i:i + n])
         return grid
 
-
     def get_index_data(self):
         tasks = []
         projects = []
-        for count, task in enumerate(sorted(self.tasks, key=(lambda x:x.end_time))):
+        for count, task in enumerate(sorted(self.tasks, key=(lambda x: x.end_time))):
             if count >= 5:
                 break
             else:
                 tasks.append(task)
-        for count, project in enumerate(sorted(self.project, key=(lambda x:x.name))):
+        for count, project in enumerate(sorted(self.project, key=(lambda x: x.name))):
             if count >= 5:
                 break
             else:
@@ -94,7 +87,8 @@ class Project(db.Model):
     """Project Class contains link to the user that interact with this project,
         the top level tasks related to id"""
     id = db.Column(db.Integer, primary_key=True)
-    changed_at = db.Column(db.DateTime(), default=datetime.now(), onupdate=datetime.now())
+    changed_at = db.Column(
+        db.DateTime(), default=datetime.now(), onupdate=datetime.now())
     name = db.Column(db.String(80))
     description = db.Column(db.String(250))
     tasks = db.relationship('Task', secondary=project_tasks, lazy='subquery',
@@ -122,10 +116,12 @@ class Project(db.Model):
         else:
             raise Exception()
 
+
 class Response(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False)
     question = db.Column(db.Integer, db.ForeignKey('question.id'))
+
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -137,7 +133,6 @@ class Question(db.Model):
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
-    questions = db.relationship('Question',backref='myquestionnaire',lazy=True)
-
-
-
+    questions = db.relationship(
+        'Question', backref='myquestionnaire', lazy=True)
+    task = db.Column(db.Integer, db.ForeignKey('task.id'))
