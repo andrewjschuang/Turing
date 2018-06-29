@@ -28,7 +28,7 @@ class MyTest(TestCase):
         assert True
 
     def test_user(self):
-        user = User(email='em', username='us', password='pass')
+        user = User(email='em', name='us', password='pass')
         db.session.add(user)
         db.session.commit()
         assert user in db.session
@@ -46,7 +46,7 @@ class MyTest(TestCase):
         assert task in db.session
 
     def test_usr_add_tsk2_prj(self):
-        user = User(email='em', username='us', password='pass')
+        user = User(email='em', name='us', password='pass')
         db.session.add(user)
         db.session.commit()
         

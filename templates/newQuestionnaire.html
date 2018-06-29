@@ -1,0 +1,88 @@
+{% extends "sidebar.html" %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/draggable.css')}}">
+{% endblock %}
+
+{% block content %}
+{{super()}}
+{% endblock %}
+
+{% block sidecontent %}
+{{super()}}
+<div class="container">
+	<div class="row">
+        <div class="control-group" id="fields" style="width:100%">
+            <label class="control-label" for="field1">Questions</label>
+            <div class="controls"> 
+                <form role="form" autocomplete="off">
+                    <div class="entry input-group col-sm-10">
+                        <input class="form-control" id="questio_name" type="text" placeholder="Give your Questionnaire a Name"/>
+                    </div>
+                    <div class="entry input-group col-sm-10">
+                        <input class="form-control" name="fields[]" type="text" placeholder="Type a question"/>
+                    	<span class="input-group-btn">
+                            <button class="btn btn-success btn-add" type="button">
+                                <span class="fas fa-plus-circle" style="font-size: 24px"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            <br>
+            
+            </div>
+        </div>
+        
+    </div>
+    <button type="button" onclick="add()" class="btn btn-primary btn-lg">Create New Questionnaire</button>
+    <small>Press <span class="fas fa-plus-circle"></span> to add another question :)</small>
+    
+</div>
+
+<script>
+    $(function()
+    {
+        $(document).on('click', '.btn-add', function(e)
+        {
+            e.preventDefault();
+    
+            var controlForm = $('.controls form:first'),
+                currentEntry = $(this).parents('.entry:first'),
+                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+    
+            newEntry.find('input').val('');
+            controlForm.find('.entry:not(:last) .btn-add')
+                .removeClass('btn-add').addClass('btn-remove')
+                .removeClass('btn-success').addClass('btn-danger')
+                .html('<span class="fas fa-minus-circle" style="font-size: 24px"></span>');
+        }).on('click', '.btn-remove', function(e)
+        {
+            $(this).parents('.entry:first').remove();
+    
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    function add(){
+        var name =  document.getElementById("questio_name").value;
+        var form = Array.from(document.getElementsByName("fields[]"));
+        var ret = "";
+        for (var i = 0; i < form.length; i++){
+            ret += i+"="+form[i].value;
+            if (i+1 < form.length)
+                ret += "&"
+        }
+        console.log(ret)
+        $.ajax({
+            type:'POST',
+            url:'',
+            data: "name="+name+"&"+ret,
+            success:function(){
+              location.reload();
+            }
+          })
+    }
+</script>
+{% endblock %}
